@@ -41,7 +41,7 @@ public class FileServiceTests
             _service.movieList.Add(movie);
         }
 
-        _service.pageSize = 10;
+        _service.PageSize = 10;
         _service.SetPageCount();
         Assert.Equal(5, _service.PageCount);
     }

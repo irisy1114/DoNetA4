@@ -15,6 +15,9 @@ public class MainService : IMainService
     }
     public void Invoke()
     {
+        _fileService.Read();//read file first
+        _fileService.PageSize = pageSize;// set page size
+
         string choice;
         do
         {
@@ -28,8 +31,9 @@ public class MainService : IMainService
             switch (choice)
             {
                 case "1":
+                    // show first page by default
+                    _fileService.ShowMovieList(1);
                     // list all movies efficiently with separate pages to display
-                    _fileService.Read(pageSize);
                     PaginationPrompt(_fileService.PageCount);
                     break;
                 case "2":
@@ -38,6 +42,7 @@ public class MainService : IMainService
                     
             }
         } while (choice == "2");
+
     }
 
     private void PaginationPrompt(int pageCount)

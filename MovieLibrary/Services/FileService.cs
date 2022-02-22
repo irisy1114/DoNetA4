@@ -10,28 +10,23 @@ public class FileService : IFileService
     string filePath = $"{AppContext.BaseDirectory}/data/movies.csv";
 
     public List<Movie> movieList;
-    public bool FileRead;
-    public int pageSize;
+    public bool FileRead { get; set;}
+    public int PageSize { get; set; }
     public int PageCount { get; set; }
     public FileService(ILogger<IFileService> logger)
     {
         _logger = logger;
     }
 
-    public void Read(int pageSize = 10)
+    public void Read()
     {
-        this.pageSize = pageSize;
+        if (FileRead) return;
+
         string filePath = $"{AppContext.BaseDirectory}/data/movies.csv";
 
         if (!File.Exists(filePath))
         {
             _logger.LogError("File does not exist: {File}", filePath);
-        }
-
-        if (FileRead)
-        {
-            ShowMovieList();
-            return;
         }
 
         // read data from file and add columns to corresponding lists
@@ -83,18 +78,10 @@ public class FileService : IFileService
 
                 movieList.Add(movie);
                 
-                //var col = line.Split(',');
-                //for (int i = 0; i < col.Length; i++)
-                //{
-                //    Console.Write(col[i] + " ");
-                //}
-
-                //Console.WriteLine();
             }
             // close file when finished
             sr.Close();
             FileRead = true;
-            ShowMovieList();
             SetPageCount();
         }
         catch (Exception e)
@@ -111,19 +98,19 @@ public class FileService : IFileService
     {
         if (this.movieList == null || !this.movieList.Any()) return;
 
-        PageCount = (int)Math.Ceiling((double)movieList.Count / pageSize);
+        PageCount = (int)Math.Ceiling((double)movieList.Count / PageSize);
     }
 
     public void ShowMovieList(int pageNum = 1)
     {
-        var firstIndex = (pageNum - 1) * pageSize;
-        var lastIndex = pageNum * pageSize - 1;
+        var firstIndex = (pageNum - 1) * PageSize;
+        var lastIndex = pageNum * PageSize - 1;
 
         if (lastIndex > movieList.Count - 1)
             lastIndex = movieList.Count - 1;
 
         Console.WriteLine("********************************");
-        Console.WriteLine($"{movieList.Count} movies found. Displaying page {pageNum}. [No {firstIndex +1}] to [No {lastIndex+1}]");
+        Console.WriteLine($"{movieList.Count} movies found. Total {PageCount} pages. Displaying page {pageNum}. Movie [No {firstIndex +1}] to [No {lastIndex+1}]");
         Console.WriteLine("--------------------------------");
         for (var i= firstIndex;i<= lastIndex;i++)
         {
@@ -141,7 +128,7 @@ public class FileService : IFileService
         // check for duplicate movie title
         //List<string> LowerCaseMovieTitles = MovieTitles.ConvertAll(t => t.ToLower());
         //if (LowerCaseMovieTitles.Contains(movieTitle.ToLower()))
-        if(movieList.Any(x=>string.Equals(x.Title, movieTitle, StringComparison.OrdinalIgnoreCase)))
+        if(movieList != null && movieList.Any(x=>string.Equals(x.Title, movieTitle, StringComparison.OrdinalIgnoreCase)))
         {
             Console.WriteLine("The title of movie has already been entered");
             _logger.LogInformation("This is a duplicate movie title {Title}", movieTitle);
