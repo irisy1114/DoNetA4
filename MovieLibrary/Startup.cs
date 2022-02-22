@@ -6,7 +6,7 @@ using MovieLibrary.Services;
 
 namespace MovieLibrary;
 
-public class Startup
+internal class Startup
 {
     public IServiceProvider ConfigureServices()
     {
