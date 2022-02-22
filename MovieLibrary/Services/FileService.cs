@@ -29,7 +29,6 @@ public class FileService : IFileService
             _logger.LogError("File does not exist: {File}", filePath);
         }
 
-        // read data from file and add columns to corresponding lists
         try
         {
             movieList = new List<Movie>();
@@ -126,8 +125,6 @@ public class FileService : IFileService
         string movieTitle = Console.ReadLine();
 
         // check for duplicate movie title
-        //List<string> LowerCaseMovieTitles = MovieTitles.ConvertAll(t => t.ToLower());
-        //if (LowerCaseMovieTitles.Contains(movieTitle.ToLower()))
         if(movieList != null && movieList.Any(x=>string.Equals(x.Title, movieTitle, StringComparison.OrdinalIgnoreCase)))
         {
             Console.WriteLine("The title of movie has already been entered");
