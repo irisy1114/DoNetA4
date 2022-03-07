@@ -3,6 +3,7 @@ using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using MovieLibrary.Model;
 using MovieLibrary.Services;
 using Xunit;
 

@@ -1,6 +1,8 @@
-﻿namespace MovieLibrary.Services;
-
-public interface IMainService
+﻿namespace MovieLibrary.Services
 {
-    void Invoke();
+
+    public interface IMainService
+    {
+        void Invoke();
+    }
 }

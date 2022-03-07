@@ -4,24 +4,26 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MovieLibrary.Services;
 
-namespace MovieLibrary;
-
-internal class Startup
+namespace MovieLibrary
 {
-    public IServiceProvider ConfigureServices()
+    internal class Startup
     {
-        IServiceCollection services = new ServiceCollection();
-
-        services.AddLogging(builder =>
+        public IServiceProvider ConfigureServices()
         {
-            builder.AddConsole();
-            builder.AddFile("app.log");
-        });
+            IServiceCollection services = new ServiceCollection();
 
-        
-        services.AddTransient<IMainService, MainService>();
-        services.AddTransient<IFileService, FileService>();
+            services.AddLogging(builder =>
+            {
+                builder.AddConsole();
+                builder.AddFile("app.log");
+            });
 
-        return services.BuildServiceProvider();
+
+            services.AddTransient<IMainService, MainService>();
+            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IRepository, JsonRepository>();
+
+            return services.BuildServiceProvider();
+        }
     }
 }
